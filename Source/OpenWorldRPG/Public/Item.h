@@ -18,5 +18,19 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	template<typename T>
+	T Avg(T First, T Second);
+
+private:
+	float runningTime;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* itemMesh;
 
 };
+
+template<typename T>
+inline T AItem::Avg(T First, T Second)
+{
+	return (First + Second) / 2;
+}

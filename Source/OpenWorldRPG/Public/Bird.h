@@ -8,6 +8,8 @@
 
 class UCapsuleComponent;
 class USkeletalMeshComponent;
+class USpringArmComponent;
+class UCameraComponent;
 
 UCLASS()
 class OPENWORLDRPG_API ABird : public APawn
@@ -27,6 +29,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void MoveForward(float _value);
+	void Turn(float _value);
+	void LookUp(float _value);
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -34,4 +38,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USkeletalMeshComponent* birdMesh;
+
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* spring;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* camera;
 };

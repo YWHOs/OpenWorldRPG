@@ -4,6 +4,8 @@
 #include "Bird.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ABird::ABird()
@@ -18,6 +20,13 @@ ABird::ABird()
 
 	birdMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("BirdMesh"));
 	birdMesh->SetupAttachment(capsule);
+
+	spring = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	spring->SetupAttachment(capsule);
+	spring->TargetArmLength = 300.f;
+
+	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	camera->SetupAttachment(spring);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
@@ -37,6 +46,14 @@ void ABird::MoveForward(float _value)
 		AddMovementInput(forward, _value);
 	}
 }
+void ABird::Turn(float _value)
+{
+	AddControllerYawInput(_value);
+}
+void ABird::LookUp(float _value)
+{
+	AddControllerPitchInput(_value);
+}
 
 // Called every frame
 void ABird::Tick(float DeltaTime)
@@ -51,5 +68,7 @@ void ABird::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABird::MoveForward);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ABird::Turn);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ABird::LookUp);
 }
 

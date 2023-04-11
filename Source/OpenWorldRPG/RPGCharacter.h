@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UGroomComponent;
 
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ACharacter
@@ -37,5 +38,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* camera;
 
-
+	UPROPERTY(VisibleAnywhere)
+	UGroomComponent* hair;
+	UPROPERTY(VisibleAnywhere)
+	UGroomComponent* eyebrows;
 };

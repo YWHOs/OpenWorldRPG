@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GroomComponent.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -25,6 +26,14 @@ ARPGCharacter::ARPGCharacter()
 
 	camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	camera->SetupAttachment(spring);
+
+	hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
+	hair->SetupAttachment(GetMesh());
+	hair->AttachmentName = FString("head");
+
+	eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
+	eyebrows->SetupAttachment(GetMesh());
+	eyebrows->AttachmentName = FString("head");
 }
 
 // Called when the game starts or when spawned

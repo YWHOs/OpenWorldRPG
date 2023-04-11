@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "RPGCharacter.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ACharacter
 {
@@ -22,8 +25,17 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 	void MoveForward(float _value);
+	void MoveRight(float _value);
+	void Turn(float _value);
+	void LookUp(float _value);
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	USpringArmComponent* spring;
+
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* camera;
 
 
 };

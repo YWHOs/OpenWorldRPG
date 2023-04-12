@@ -59,6 +59,8 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ARPGCharacter::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &ARPGCharacter::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ARPGCharacter::LookUp);
+
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 }
 
 void ARPGCharacter::MoveForward(float _value)

@@ -3,7 +3,7 @@
 
 #include "Item.h"
 #include "DrawDebugHelpers.h"
-
+#include "Components/SphereComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -13,6 +13,9 @@ AItem::AItem()
 
 	itemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
 	RootComponent = itemMesh;
+
+	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
+	sphere->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +23,29 @@ void AItem::BeginPlay()
 {
 	Super::BeginPlay();
 
+	sphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnSphereOverlap);
+	sphere->OnComponentEndOverlap.AddDynamic(this, &AItem::OnSphereEndOverlap);
 	Avg<int32>(1, 3);
+}
+
+void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	const FString actorName = OtherActor->GetName();
+
+	if (GEngine) 
+	{
+		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, actorName);
+	}
+}
+
+void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	const FString actorName = FString("Ending: ") + OtherActor->GetName();
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Blue, actorName);
+	}
 }
 
 // Called every frame

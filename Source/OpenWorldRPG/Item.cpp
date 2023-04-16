@@ -4,6 +4,7 @@
 #include "Item.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SphereComponent.h"
+#include "Characters/RPGCharacter.h"
 
 // Sets default values
 AItem::AItem()
@@ -35,21 +36,19 @@ float AItem::TransformedSin()
 
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const FString actorName = OtherActor->GetName();
-
-	if (GEngine) 
+	ARPGCharacter* character = Cast<ARPGCharacter>(OtherActor);
+	if (character)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Red, actorName);
+		character->SetOverlapItem(this);
 	}
 }
 
 void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	const FString actorName = FString("Ending: ") + OtherActor->GetName();
-
-	if (GEngine)
+	ARPGCharacter* character = Cast<ARPGCharacter>(OtherActor);
+	if (character)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::Blue, actorName);
+		character->SetOverlapItem(nullptr);
 	}
 }
 

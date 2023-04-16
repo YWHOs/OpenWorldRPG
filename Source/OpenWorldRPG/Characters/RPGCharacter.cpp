@@ -6,6 +6,9 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GroomComponent.h"
+#include "../Item.h"
+#include "../Weapon.h"
+
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -61,6 +64,7 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &ARPGCharacter::LookUp);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
 }
 
 void ARPGCharacter::MoveForward(float _value)
@@ -96,4 +100,12 @@ void ARPGCharacter::Turn(float _value)
 void ARPGCharacter::LookUp(float _value)
 {
 	AddControllerPitchInput(_value);
+}
+void ARPGCharacter::EKeyPressed()
+{
+	AWeapon* overlapWeapon = Cast<AWeapon>(overlapItem);
+	if (overlapWeapon)
+	{
+		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"));
+	}
 }

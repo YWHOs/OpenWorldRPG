@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
+class AItem;
 
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ACharacter
@@ -30,6 +31,7 @@ protected:
 	void MoveRight(float _value);
 	void Turn(float _value);
 	void LookUp(float _value);
+	void EKeyPressed();
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -42,4 +44,9 @@ private:
 	UGroomComponent* hair;
 	UPROPERTY(VisibleAnywhere)
 	UGroomComponent* eyebrows;
+
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* overlapItem;
+public:
+	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
 };

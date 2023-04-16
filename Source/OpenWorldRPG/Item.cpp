@@ -28,6 +28,11 @@ void AItem::BeginPlay()
 	Avg<int32>(1, 3);
 }
 
+float AItem::TransformedSin()
+{
+	return amplitude * FMath::Sin(runningTime * timeConstant);
+}
+
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	const FString actorName = OtherActor->GetName();
@@ -55,8 +60,7 @@ void AItem::Tick(float DeltaTime)
 
 	runningTime += DeltaTime;
 
-	float deltaZ = FMath::Sin(runningTime);
-
-	AddActorWorldOffset(FVector(0.f, 0.f, deltaZ));
+	//float deltaZ = FMath::Sin(runningTime);
+	//AddActorWorldOffset(FVector(0.f, 0.f, TransformedSin()));
 }
 

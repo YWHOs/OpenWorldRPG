@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "CharacterTypes.h"
 #include "RPGCharacter.generated.h"
 
 class USpringArmComponent;
@@ -34,6 +35,8 @@ protected:
 	void EKeyPressed();
 
 private:
+	ECharacterState characterState = ECharacterState::ECS_Unequipped;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* spring;
 
@@ -49,4 +52,5 @@ private:
 	AItem* overlapItem;
 public:
 	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
+	FORCEINLINE ECharacterState GetCharacterState() const { return characterState; }
 };

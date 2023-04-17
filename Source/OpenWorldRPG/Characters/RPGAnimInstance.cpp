@@ -27,5 +27,6 @@ void URPGAnimInstance::NativeUpdateAnimation(float _time)
 		groundSpeed = UKismetMathLibrary::VSizeXY(characterMovement->Velocity);
 
 		isFalling = characterMovement->IsFalling();
+		characterState = character->GetCharacterState();
 	}
 }

@@ -8,7 +8,7 @@
 #include "GroomComponent.h"
 #include "../Item.h"
 #include "../Weapon.h"
-
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -65,6 +65,7 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
+	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
 }
 
 void ARPGCharacter::MoveForward(float _value)
@@ -108,5 +109,27 @@ void ARPGCharacter::EKeyPressed()
 	{
 		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"));
 		characterState = ECharacterState::ECS_EquippedOneHand;
+	}
+}
+void ARPGCharacter::Attack()
+{
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && attackMontage)
+	{
+		animInstance->Montage_Play(attackMontage);
+		int32 selection = FMath::RandRange(0, 1);
+		FName sectionName = FName();
+		switch (selection)
+		{
+		case 0:
+			sectionName = FName("Attack1");
+			break;
+		case 1:
+			sectionName = FName("Attack2");
+			break;
+		default:
+			break;
+		}
+		animInstance->Montage_JumpToSection(sectionName, attackMontage);
 	}
 }

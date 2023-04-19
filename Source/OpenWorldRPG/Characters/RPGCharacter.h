@@ -11,6 +11,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
+class UAnimMontage;
 
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ACharacter
@@ -33,6 +34,7 @@ protected:
 	void Turn(float _value);
 	void LookUp(float _value);
 	void EKeyPressed();
+	void Attack();
 
 private:
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
@@ -50,6 +52,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* overlapItem;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* attackMontage;
 public:
 	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return characterState; }

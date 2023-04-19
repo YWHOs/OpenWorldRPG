@@ -8,6 +8,11 @@
 
 class USphereComponent;
 
+enum class EItemState : uint8
+{
+	EIS_Hovering,
+	EIS_Equipped
+};
 UCLASS()
 class OPENWORLDRPG_API AItem : public AActor
 {
@@ -47,6 +52,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* sphere;
+
+	EItemState itemState = EItemState::EIS_Hovering;
 
 };
 

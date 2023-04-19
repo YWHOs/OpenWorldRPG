@@ -9,6 +9,7 @@ void AWeapon::Equip(USceneComponent* _parent, FName _socketName)
 {
 	FAttachmentTransformRules transformRules(EAttachmentRule::SnapToTarget, true);
 	itemMesh->AttachToComponent(_parent, transformRules, _socketName);
+	itemState = EItemState::EIS_Equipped;
 }
 void AWeapon::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {

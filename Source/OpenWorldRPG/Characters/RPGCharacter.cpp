@@ -83,6 +83,7 @@ void ARPGCharacter::MoveForward(float _value)
 }
 void ARPGCharacter::MoveRight(float _value)
 {
+	if (actionState == EActionState::EAS_Attacking) return;
 	if (Controller && _value != 0.f)
 	{
 		const FRotator controlRotation = GetControlRotation();

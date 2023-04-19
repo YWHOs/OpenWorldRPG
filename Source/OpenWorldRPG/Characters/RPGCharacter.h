@@ -12,6 +12,7 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 class UAnimMontage;
+class AWeapon;
 
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ACharacter
@@ -41,6 +42,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 	bool CanAttack();
+	void PlayEquipMontage(FName _sectionName);
+	bool CanDisarm();
+	bool CanArm();
 
 private:
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
@@ -62,8 +66,14 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* overlapItem;
 
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+	AWeapon* equipWeapon;
+
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* attackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* equipMontage;
 public:
 	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return characterState; }

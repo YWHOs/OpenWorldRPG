@@ -110,21 +110,42 @@ void ARPGCharacter::EKeyPressed()
 	{
 		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"));
 		characterState = ECharacterState::ECS_EquippedOneHand;
+		overlapItem = nullptr;
+		equipWeapon = overlapWeapon;
+	}
+	else
+	{
+		if (CanDisarm())
+		{
+			PlayEquipMontage(FName("Unequip"));
+			characterState = ECharacterState::ECS_Unequipped;
+		}
+		else if (CanArm())
+		{
+			PlayEquipMontage(FName("Equip"));
+			characterState = ECharacterState::ECS_EquippedOneHand;
+		}
 	}
 }
 void ARPGCharacter::Attack()
 {
-
 	if (CanAttack())
 	{
 		PlayAttackMontage();
 		actionState = EActionState::EAS_Attacking;
 	}
-
 }
 bool ARPGCharacter::CanAttack()
 {
 	return actionState == EActionState::EAS_Unoccupied && characterState != ECharacterState::ECS_Unequipped;
+}
+bool ARPGCharacter::CanDisarm()
+{
+	return actionState == EActionState::EAS_Unoccupied && characterState != ECharacterState::ECS_Unequipped;
+}
+bool ARPGCharacter::CanArm()
+{
+	return actionState == EActionState::EAS_Unoccupied && characterState == ECharacterState::ECS_Unequipped && equipWeapon;
 }
 void ARPGCharacter::PlayAttackMontage()
 {
@@ -146,6 +167,15 @@ void ARPGCharacter::PlayAttackMontage()
 			break;
 		}
 		animInstance->Montage_JumpToSection(sectionName, attackMontage);
+	}
+}
+void ARPGCharacter::PlayEquipMontage(FName _sectionName)
+{
+	UAnimInstance* animInstace = GetMesh()->GetAnimInstance();
+	if (animInstace && equipMontage)
+	{
+		animInstace->Montage_Play(equipMontage);
+		animInstace->Montage_JumpToSection(_sectionName, equipMontage);
 	}
 }
 void ARPGCharacter::AttackEnd()

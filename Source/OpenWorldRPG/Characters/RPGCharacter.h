@@ -46,6 +46,15 @@ protected:
 	bool CanDisarm();
 	bool CanArm();
 
+	UFUNCTION(BlueprintCallable)
+	void Disarm();
+
+	UFUNCTION(BlueprintCallable)
+	void Arm();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishEquip();
+
 private:
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
 

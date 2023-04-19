@@ -9,6 +9,7 @@
 #include "../Item.h"
 #include "../Weapon.h"
 #include "Animation/AnimMontage.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -67,7 +68,13 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
 }
-
+void ARPGCharacter::SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (equipWeapon && equipWeapon->GetWeaponBox())
+	{
+		equipWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
+	}
+}
 void ARPGCharacter::MoveForward(float _value)
 {
 	if (Controller && _value != 0.f)

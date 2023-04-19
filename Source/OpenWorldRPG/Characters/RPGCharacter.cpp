@@ -113,12 +113,17 @@ void ARPGCharacter::EKeyPressed()
 }
 void ARPGCharacter::Attack()
 {
-	if (actionState == EActionState::EAS_Unoccupied)
+
+	if (CanAttack())
 	{
 		PlayAttackMontage();
 		actionState = EActionState::EAS_Attacking;
 	}
 
+}
+bool ARPGCharacter::CanAttack()
+{
+	return actionState == EActionState::EAS_Unoccupied && characterState != ECharacterState::ECS_Unequipped;
 }
 void ARPGCharacter::PlayAttackMontage()
 {
@@ -141,4 +146,8 @@ void ARPGCharacter::PlayAttackMontage()
 		}
 		animInstance->Montage_JumpToSection(sectionName, attackMontage);
 	}
+}
+void ARPGCharacter::AttackEnd()
+{
+	actionState = EActionState::EAS_Unoccupied;
 }

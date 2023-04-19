@@ -5,7 +5,13 @@
 #include "Characters\/RPGCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 
+AWeapon::AWeapon()
+{
+	weaponBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Weapon Box"));
+	weaponBox->SetupAttachment(GetRootComponent());
+}
 void AWeapon::Equip(USceneComponent* _parent, FName _socketName)
 {
 	AttachMeshToSocket(_parent, _socketName);

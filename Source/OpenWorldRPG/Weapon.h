@@ -7,6 +7,7 @@
 #include "Weapon.generated.h"
 
 class USoundBase;
+class UBoxComponent;
 /**
  * 
  */
@@ -16,6 +17,7 @@ class OPENWORLDRPG_API AWeapon : public AItem
 	GENERATED_BODY()
 
 public:
+	AWeapon();
 	void Equip(USceneComponent* _parent, FName _socketName);
 	void AttachMeshToSocket(USceneComponent* _parent, const FName& _socketName);
 protected:
@@ -26,4 +28,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	USoundBase* equipSound;
+
+	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
+	UBoxComponent* weaponBox;
 };

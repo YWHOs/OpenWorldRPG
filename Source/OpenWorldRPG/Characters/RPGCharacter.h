@@ -36,8 +36,12 @@ protected:
 	void EKeyPressed();
 	void Attack();
 
+	// Montage
+	void PlayAttackMontage();
+
 private:
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
+	EActionState actionState = EActionState::EAS_Unoccupied;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* spring;

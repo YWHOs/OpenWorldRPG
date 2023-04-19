@@ -113,11 +113,20 @@ void ARPGCharacter::EKeyPressed()
 }
 void ARPGCharacter::Attack()
 {
+	if (actionState == EActionState::EAS_Unoccupied)
+	{
+		PlayAttackMontage();
+		actionState = EActionState::EAS_Attacking;
+	}
+
+}
+void ARPGCharacter::PlayAttackMontage()
+{
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
 	if (animInstance && attackMontage)
 	{
 		animInstance->Montage_Play(attackMontage);
-		int32 selection = FMath::RandRange(0, 1);
+		const int32 selection = FMath::RandRange(0, 1);
 		FName sectionName = FName();
 		switch (selection)
 		{

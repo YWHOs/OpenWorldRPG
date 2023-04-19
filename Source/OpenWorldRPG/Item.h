@@ -46,6 +46,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* itemMesh;
 
+	EItemState itemState = EItemState::EIS_Hovering;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float runningTime;
@@ -53,7 +55,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* sphere;
 
-	EItemState itemState = EItemState::EIS_Hovering;
 
 };
 

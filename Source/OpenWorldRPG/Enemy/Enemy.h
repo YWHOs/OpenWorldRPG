@@ -7,6 +7,8 @@
 #include "../HitInterface.h"
 #include "Enemy.generated.h"
 
+class UAnimMontage;
+
 UCLASS()
 class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
 {
@@ -20,11 +22,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtaul void GetHit(const FVector& _point) override;
+	virtual void GetHit(const FVector& _point) override;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void PlayHitMontage(const FName& _sectionName);
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* hitMontage;
 
 public:	
 

@@ -196,7 +196,7 @@ void ARPGCharacter::PlayAttackMontage()
 		animInstance->Montage_JumpToSection(sectionName, attackMontage);
 	}
 }
-void ARPGCharacter::PlayEquipMontage(FName _sectionName)
+void ARPGCharacter::PlayEquipMontage(const FName& _sectionName)
 {
 	UAnimInstance* animInstace = GetMesh()->GetAnimInstance();
 	if (animInstace && equipMontage)

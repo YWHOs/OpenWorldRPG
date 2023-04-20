@@ -21,6 +21,15 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void AEnemy::PlayHitMontage(const FName& _sectionName)
+{
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && hitMontage)
+	{
+		animInstance->Montage_Play(hitMontage);
+		animInstance->Montage_JumpToSection(_sectionName, hitMontage);
+	}
+}
 
 void AEnemy::Tick(float DeltaTime)
 {
@@ -36,5 +45,5 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::GetHit(const FVector& _point)
 {
-
+	PlayHitMontage(FName("FromLeft"));
 }

@@ -57,4 +57,9 @@ void AEnemy::GetHit(const FVector& _point)
 	double theta = FMath::Acos(cosTheta);
 	theta = FMath::RadiansToDegrees(theta);
 
+	const FVector crossProduct = FVector::CrossProduct(forward, hit);
+	if (crossProduct.Z < 0)
+	{
+		theta *= -1.f;
+	}
 }

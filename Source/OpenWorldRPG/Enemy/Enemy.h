@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "../HitInterface.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class OPENWORLDRPG_API AEnemy : public ACharacter
+class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
 {
 	GENERATED_BODY()
 
@@ -18,6 +19,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtaul void GetHit(const FVector& _point) override;
 
 protected:
 	// Called when the game starts or when spawned

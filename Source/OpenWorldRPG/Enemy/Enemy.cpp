@@ -34,3 +34,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AEnemy::GetHit(const FVector& _point)
+{
+
+}

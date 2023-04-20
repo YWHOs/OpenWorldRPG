@@ -46,4 +46,15 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemy::GetHit(const FVector& _point)
 {
 	PlayHitMontage(FName("FromLeft"));
+
+	const FVector forward = GetActorForwardVector();
+	const FVector impactLower(_point.X, _point.Y, GetActorLocation().Z);
+	const FVector hit = (impactLower - GetActorLocation()).GetSafeNormal();
+
+	// Forward * Hit = |Forward||Hit| * cos(theta)
+	const double cosTheta = FVector::DotProduct(forward, hit);
+	// Take inverse cosine of cos to get theta
+	double theta = FMath::Acos(cosTheta);
+	theta = FMath::RadiansToDegrees(theta);
+
 }

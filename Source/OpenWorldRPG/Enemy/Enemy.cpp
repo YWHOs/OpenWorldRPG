@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AEnemy::AEnemy()
 {
@@ -46,6 +47,11 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemy::GetHit(const FVector& _point)
 {
 	DirectionalHitReact(_point);
+
+	if (hitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, hitSound, _point);
+	}
 }
 
 void AEnemy::DirectionalHitReact(const FVector& _point)

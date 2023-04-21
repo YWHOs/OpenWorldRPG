@@ -24,6 +24,8 @@ public:
 
 	virtual void GetHit(const FVector& _point) override;
 
+	void DirectionalHitReact(const FVector& _point);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

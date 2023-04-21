@@ -73,6 +73,7 @@ void ARPGCharacter::SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled)
 	if (equipWeapon && equipWeapon->GetWeaponBox())
 	{
 		equipWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
+		equipWeapon->ignoreActors.Empty();
 	}
 }
 void ARPGCharacter::MoveForward(float _value)

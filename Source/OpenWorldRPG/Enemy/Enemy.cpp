@@ -45,7 +45,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::GetHit(const FVector& _point)
 {
-	PlayHitMontage(FName("FromLeft"));
+
 
 	const FVector forward = GetActorForwardVector();
 	const FVector impactLower(_point.X, _point.Y, GetActorLocation().Z);
@@ -62,4 +62,18 @@ void AEnemy::GetHit(const FVector& _point)
 	{
 		theta *= -1.f;
 	}
+	FName section("FromBack");
+	if (theta >= -45.f && theta < 45.f)
+	{
+		section = FName("FromFront");
+	}
+	else if (theta >= -135.f && theta < -45.f)
+	{
+		section = FName("FromLeft");
+	}
+	else if (theta >= 45.f && theta < 135.f)
+	{
+		section = FName("FromRight");
+	}
+	PlayHitMontage(FName(section));
 }

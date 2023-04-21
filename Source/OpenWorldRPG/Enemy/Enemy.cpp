@@ -52,6 +52,10 @@ void AEnemy::GetHit(const FVector& _point)
 	{
 		UGameplayStatics::PlaySoundAtLocation(this, hitSound, _point);
 	}
+	if (hitParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), hitParticles, _point);
+	}
 }
 
 void AEnemy::DirectionalHitReact(const FVector& _point)

@@ -34,6 +34,6 @@ private:
 
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ATreasure> treasureClass;
+	TArray<TSubclassOf<class ATreasure>> treasureClasses;
 
 };

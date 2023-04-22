@@ -44,7 +44,7 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::GetHit(const FVector& _point)
+void AEnemy::GetHit_Implementation(const FVector& _point)
 {
 	DirectionalHitReact(_point);
 

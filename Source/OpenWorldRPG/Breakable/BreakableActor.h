@@ -20,7 +20,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void GetHit(const FVector& _point) override;
+	virtual void GetHit_Implementation(const FVector& _point) override;
 
 protected:
 	// Called when the game starts or when spawned

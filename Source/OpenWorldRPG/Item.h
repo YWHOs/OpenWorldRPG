@@ -49,7 +49,10 @@ protected:
 	EItemState itemState = EItemState::EIS_Hovering;
 
 	UPROPERTY(VisibleAnywhere)
-		USphereComponent* sphere;
+	USphereComponent* sphere;
+
+	UPROPERTY(EditAnywhere)
+	class UNiagaraComponent* emberEffect;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

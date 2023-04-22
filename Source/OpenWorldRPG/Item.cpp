@@ -5,6 +5,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/SphereComponent.h"
 #include "Characters/RPGCharacter.h"
+#include "NiagaraComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -17,6 +18,9 @@ AItem::AItem()
 
 	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	sphere->SetupAttachment(GetRootComponent());
+
+	emberEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Embers"));
+	emberEffect->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned

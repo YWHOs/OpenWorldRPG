@@ -3,6 +3,8 @@
 
 #include "BreakableActor.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "../Treasure.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABreakableActor::ABreakableActor()
@@ -15,6 +17,13 @@ ABreakableActor::ABreakableActor()
 
 	geometryCollection->SetGenerateOverlapEvents(true);
 	geometryCollection->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	geometryCollection->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
+	capsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Capsule"));
+	capsule->SetupAttachment(GetRootComponent());
+	capsule->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	capsule->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Block);
+
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +42,13 @@ void ABreakableActor::Tick(float DeltaTime)
 
 void ABreakableActor::GetHit_Implementation(const FVector& _point)
 {
-
+	UWorld* world = GetWorld();
+	if (world && treasureClass)
+	{
+		FVector location = GetActorLocation();
+		location.Z += 75.f;
+		world->SpawnActor<ATreasure>(treasureClass, location, GetActorRotation());
+	}
+	//GetWorld()->SpawnActor();
 }
 

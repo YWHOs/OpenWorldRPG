@@ -31,9 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UCapsuleComponent* capsule;
 private:
-
-
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<class ATreasure>> treasureClasses;
+
+	bool isBroken = false;
 
 };

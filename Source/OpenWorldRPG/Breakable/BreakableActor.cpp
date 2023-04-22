@@ -30,7 +30,6 @@ ABreakableActor::ABreakableActor()
 void ABreakableActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -42,6 +41,8 @@ void ABreakableActor::Tick(float DeltaTime)
 
 void ABreakableActor::GetHit_Implementation(const FVector& _point)
 {
+	if (isBroken) return;
+	isBroken = true;
 	UWorld* world = GetWorld();
 	if (world && treasureClasses.Num() > 0)
 	{

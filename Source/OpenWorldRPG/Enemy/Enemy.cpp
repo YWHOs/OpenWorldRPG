@@ -19,14 +19,40 @@ AEnemy::AEnemy()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
-	healthBarWidget = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
-	healthBarWidget->SetupAttachment(GetRootComponent());
+	healthBarComponent = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
+	healthBarComponent->SetupAttachment(GetRootComponent());
 }
 
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+void AEnemy::Die()
+{
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && dieMontage)
+	{
+		animInstance->Montage_Play(dieMontage);
+
+		const int32 selection = FMath::RandRange(0, 2);
+		FName sectionName = FName();
+		switch (selection)
+		{
+		case 0:
+			sectionName = FName("Death1");
+			break;
+		case 1:
+			sectionName = FName("Death2");
+			break;
+		case 2:
+			sectionName = FName("Death3");
+			break;
+		default:
+			break;
+		}
+		animInstance->Montage_JumpToSection(sectionName, dieMontage);
+	}
 }
 void AEnemy::PlayHitMontage(const FName& _sectionName)
 {
@@ -52,7 +78,15 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::GetHit_Implementation(const FVector& _point)
 {
-	DirectionalHitReact(_point);
+	if (attributes && attributes->IsAlive())
+	{
+		DirectionalHitReact(_point);
+	}
+	else
+	{
+		Die();
+	}
+	
 
 	if (hitSound)
 	{
@@ -99,10 +133,10 @@ void AEnemy::DirectionalHitReact(const FVector& _point)
 
 float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	if (attributes && healthBarWidget)
+	if (attributes && healthBarComponent)
 	{
 		attributes->ReceiveDamage(DamageAmount);
-		healthBarWidget->SetHealth(attributes->GetHealth());
+		healthBarComponent->SetHealth(attributes->GetHealth());
 	}
 	return DamageAmount;
 }

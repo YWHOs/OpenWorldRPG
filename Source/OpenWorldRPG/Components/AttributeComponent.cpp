@@ -31,6 +31,10 @@ float UAttributeComponent::GetHealth()
 {
 	return health / maxHealth;
 }
+bool UAttributeComponent::IsAlive()
+{
+	return health > 0.f;
+}
 // Called every frame
 void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

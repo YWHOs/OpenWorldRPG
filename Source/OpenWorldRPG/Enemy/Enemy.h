@@ -30,14 +30,17 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	void Die();
 	void PlayHitMontage(const FName& _sectionName);
 
 private:
 	UPROPERTY(VisibleAnywhere)
 	UAttributeComponent* attributes;
 	UPROPERTY(VisibleAnywhere)
-	UHealthBarComponent* healthBarWidget;
+	UHealthBarComponent* healthBarComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* dieMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* hitMontage;

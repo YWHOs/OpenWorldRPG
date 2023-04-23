@@ -8,7 +8,8 @@
 #include "Enemy.generated.h"
 
 class UAnimMontage;
-
+class UAttributeComponent;
+class UWidgetComponent;
 UCLASS()
 class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
 {
@@ -33,6 +34,11 @@ protected:
 	void PlayHitMontage(const FName& _sectionName);
 
 private:
+	UPROPERTY(VisibleAnywhere)
+	UAttributeComponent* attributes;
+	UPROPERTY(VisibleAnywhere)
+	UWidgetComponent* healthBarWidget;
+
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* hitMontage;
 

@@ -5,6 +5,8 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "../Components/AttributeComponent.h"
+#include "Components/WidgetComponent.h"
 
 AEnemy::AEnemy()
 {
@@ -15,6 +17,10 @@ AEnemy::AEnemy()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
+	attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
+	healthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+	healthBarWidget->SetupAttachment(GetRootComponent());
 }
 
 void AEnemy::BeginPlay()

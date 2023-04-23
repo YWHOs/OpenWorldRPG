@@ -55,6 +55,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = VisualEffects)
 	UParticleSystem* hitParticles;
 
+	UPROPERTY()
+	AActor* combatTarget;
+
+	UPROPERTY(EditAnywhere)
+	double combatRadius = 500.f;
 
 public:	
 

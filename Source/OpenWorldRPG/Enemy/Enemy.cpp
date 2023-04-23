@@ -41,12 +41,15 @@ void AEnemy::Die()
 		{
 		case 0:
 			sectionName = FName("Death1");
+			deathPose = EDeathPose::EDP_Death1;
 			break;
 		case 1:
 			sectionName = FName("Death2");
+			deathPose = EDeathPose::EDP_Death2;
 			break;
 		case 2:
 			sectionName = FName("Death3");
+			deathPose = EDeathPose::EDP_Death3;
 			break;
 		default:
 			break;

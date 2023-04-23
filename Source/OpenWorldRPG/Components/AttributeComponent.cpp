@@ -23,7 +23,14 @@ void UAttributeComponent::BeginPlay()
 	
 }
 
-
+void UAttributeComponent::ReceiveDamage(float _damage)
+{
+	health = FMath::Clamp(health - _damage, 0.f, maxHealth);
+}
+float UAttributeComponent::GetHealth()
+{
+	return health / maxHealth;
+}
 // Called every frame
 void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

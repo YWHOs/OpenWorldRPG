@@ -13,5 +13,9 @@ UCLASS()
 class OPENWORLDRPG_API UHealthBarComponent : public UWidgetComponent
 {
 	GENERATED_BODY()
-	
+public:
+	void SetHealth(float _percent);
+private:
+	UPROPERTY()
+	class UHealthBar* healthBarWidget;
 };

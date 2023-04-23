@@ -116,7 +116,7 @@ void ARPGCharacter::EKeyPressed()
 	AWeapon* overlapWeapon = Cast<AWeapon>(overlapItem);
 	if (overlapWeapon)
 	{
-		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"));
+		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"), this, this);
 		characterState = ECharacterState::ECS_EquippedOneHand;
 		overlapItem = nullptr;
 		equipWeapon = overlapWeapon;

@@ -6,7 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Components/AttributeComponent.h"
-#include "Components/WidgetComponent.h"
+#include "../HUD/HealthBarComponent.h"
 
 AEnemy::AEnemy()
 {
@@ -19,14 +19,14 @@ AEnemy::AEnemy()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
-	healthBarWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+	healthBarWidget = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	healthBarWidget->SetupAttachment(GetRootComponent());
 }
 
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 void AEnemy::PlayHitMontage(const FName& _sectionName)
 {
@@ -95,4 +95,14 @@ void AEnemy::DirectionalHitReact(const FVector& _point)
 		section = FName("FromRight");
 	}
 	PlayHitMontage(FName(section));
+}
+
+float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	if (attributes && healthBarWidget)
+	{
+		attributes->ReceiveDamage(DamageAmount);
+		healthBarWidget->SetHealth(attributes->GetHealth());
+	}
+	return DamageAmount;
 }

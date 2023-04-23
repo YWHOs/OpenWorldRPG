@@ -18,7 +18,7 @@ class OPENWORLDRPG_API AWeapon : public AItem
 
 public:
 	AWeapon();
-	void Equip(USceneComponent* _parent, FName _socketName);
+	void Equip(USceneComponent* _parent, FName _socketName, AActor* _owner, APawn* _instigator);
 	void AttachMeshToSocket(USceneComponent* _parent, const FName& _socketName);
 	TArray<AActor*> ignoreActors;
 protected:
@@ -45,6 +45,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* boxTraceEnd;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	float damage = 20.f;
 
 public:
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return weaponBox; }

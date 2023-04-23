@@ -9,7 +9,7 @@
 
 class UAnimMontage;
 class UAttributeComponent;
-class UWidgetComponent;
+class UHealthBarComponent;
 UCLASS()
 class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
 {
@@ -26,7 +26,7 @@ public:
 	virtual void GetHit_Implementation(const FVector& _point) override;
 
 	void DirectionalHitReact(const FVector& _point);
-
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,7 +37,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UAttributeComponent* attributes;
 	UPROPERTY(VisibleAnywhere)
-	UWidgetComponent* healthBarWidget;
+	UHealthBarComponent* healthBarWidget;
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* hitMontage;

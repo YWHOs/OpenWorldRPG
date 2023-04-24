@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "../Components/AttributeComponent.h"
 #include "../HUD/HealthBarComponent.h"
+#include "AIController.h"
 
 AEnemy::AEnemy()
 {
@@ -37,6 +38,21 @@ void AEnemy::BeginPlay()
 		healthBarComponent->SetVisibility(false);
 	}
 
+	enemyController = Cast<AAIController>(GetController());
+	if (enemyController && patrolTarget)
+	{
+		FAIMoveRequest moveRequest;
+		moveRequest.SetGoalActor(patrolTarget);
+		moveRequest.SetAcceptanceRadius(15.f);
+		FNavPathSharedPtr navPath;
+		enemyController->MoveTo(moveRequest, &navPath);
+		TArray<FNavPathPoint>& pathPoints = navPath->GetPathPoints();
+		for (auto& point : pathPoints)
+		{
+			const FVector& location = point.Location;
+			DrawDebugSphere(GetWorld(), location, 12.f, 12, FColor::Green, false, 10.f);
+		}
+	}
 }
 void AEnemy::Die()
 {

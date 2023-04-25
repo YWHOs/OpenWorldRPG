@@ -11,6 +11,7 @@
 class UAnimMontage;
 class UAttributeComponent;
 class UHealthBarComponent;
+class UPawnSensingComponent;
 UCLASS()
 class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
 {
@@ -37,20 +38,26 @@ protected:
 	bool IsTargetRange(AActor* _target, double _radius);
 	void MoveToTarget(AActor* _target);
 	AActor* ChoosePatrolTarget();
+	UFUNCTION()
+	void PawnSeen(APawn* _seePawn);
 	void PlayHitMontage(const FName& _sectionName);
 
 	UPROPERTY(BlueprintReadOnly)
 	EDeathPose deathPose = EDeathPose::EDP_Alive;
 
 private:
+
+	//Components
 	UPROPERTY(VisibleAnywhere)
 	UAttributeComponent* attributes;
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* healthBarComponent;
+	UPROPERTY(VisibleAnywhere)
+	UPawnSensingComponent* pawnSensing;
 
+	//Animation
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* dieMontage;
-
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* hitMontage;
 
@@ -84,6 +91,8 @@ private:
 	float waitMin = 3.f;
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float waitMax = 5.f;
+
+	EEnemyState enemyState = EEnemyState::EES_Patrolling;
 public:	
 
 

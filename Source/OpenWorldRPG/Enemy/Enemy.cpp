@@ -9,6 +9,7 @@
 #include "../Components/AttributeComponent.h"
 #include "../HUD/HealthBarComponent.h"
 #include "AIController.h"
+#include "Perception/PawnSensingComponent.h"
 
 AEnemy::AEnemy()
 {
@@ -28,6 +29,10 @@ AEnemy::AEnemy()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+
+	pawnSensing = CreateDefaultSubobject< UPawnSensingComponent>(TEXT("PawnSensing"));
+	pawnSensing->SightRadius = 4000.f;
+	pawnSensing->SetPeripheralVisionAngle(45.f);
 }
 void AEnemy::PatrolTimerFinish()
 {
@@ -43,6 +48,11 @@ void AEnemy::BeginPlay()
 
 	enemyController = Cast<AAIController>(GetController());
 	MoveToTarget(patrolTarget);
+
+	if (pawnSensing)
+	{
+		pawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+	}
 }
 void AEnemy::Die()
 {
@@ -110,6 +120,18 @@ AActor* AEnemy::ChoosePatrolTarget()
 	}
 	return nullptr;
 }
+void AEnemy::PawnSeen(APawn* _seePawn)
+{
+	if (enemyState == EEnemyState::EES_Chasing) return;
+	if (_seePawn->ActorHasTag(FName("Player")))
+	{
+		enemyState = EEnemyState::EES_Chasing;
+		GetWorldTimerManager().ClearTimer(patrolTimer);
+		GetCharacterMovement()->MaxWalkSpeed = 300.f;
+		combatTarget = _seePawn;
+		MoveToTarget(combatTarget);
+	}
+}
 void AEnemy::PlayHitMontage(const FName& _sectionName)
 {
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
@@ -124,8 +146,14 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckCombatTarget();
-	CheckPatrolTarget();
+	if (enemyState > EEnemyState::EES_Patrolling)
+	{
+		CheckCombatTarget();
+	}
+	else
+	{
+		CheckPatrolTarget();
+	}
 }
 
 void AEnemy::CheckPatrolTarget()

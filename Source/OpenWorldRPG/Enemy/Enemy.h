@@ -21,6 +21,8 @@ public:
 	AEnemy();
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void CheckPatrolTarget();
+	void CheckCombatTarget();
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -33,6 +35,8 @@ protected:
 	virtual void BeginPlay() override;
 	void Die();
 	bool IsTargetRange(AActor* _target, double _radius);
+	void MoveToTarget(AActor* _target);
+	AActor* ChoosePatrolTarget();
 	void PlayHitMontage(const FName& _sectionName);
 
 	UPROPERTY(BlueprintReadOnly)
@@ -73,6 +77,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	double patrolRadius = 200.f;
 
+	FTimerHandle patrolTimer;
+	void PatrolTimerFinish();
+
+	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	float waitMin = 3.f;
+	UPROPERTY(EditAnywhere, Category = "AI Navigation")
+	float waitMax = 5.f;
 public:	
 
 

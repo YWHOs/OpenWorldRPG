@@ -89,6 +89,11 @@ void AEnemy::Die()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetLifeSpan(3.f);
 }
+bool AEnemy::IsTargetRange(AActor* _target, double _radius)
+{
+	const double distanceToTarget = (_target->GetActorLocation() - GetActorLocation()).Size();
+	return distanceToTarget <= _radius;
+}
 void AEnemy::PlayHitMontage(const FName& _sectionName)
 {
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
@@ -105,13 +110,37 @@ void AEnemy::Tick(float DeltaTime)
 
 	if (combatTarget)
 	{
-		const double distanceToTarget = (combatTarget->GetActorLocation() - GetActorLocation()).Size();
-		if (distanceToTarget > combatRadius)
+		if (!IsTargetRange(combatTarget, combatRadius))
 		{
 			combatTarget = nullptr;
 			if (healthBarComponent)
 			{
 				healthBarComponent->SetVisibility(false);
+			}
+		}
+	}
+	if (patrolTarget && enemyController)
+	{
+		if (IsTargetRange(patrolTarget, patrolRadius))
+		{
+			TArray<AActor*> validTargets;
+			for (AActor* target : patrolTargets)
+			{
+				if (target != patrolTarget)
+				{
+					validTargets.AddUnique(target);
+				}
+			}
+			if (patrolTargets.Num() > 0)
+			{
+				const int32 selection = FMath::RandRange(0, patrolTargets.Num() - 1);
+				AActor* target = patrolTargets[selection];
+				patrolTarget = target;
+
+				FAIMoveRequest moveRequest;
+				moveRequest.SetGoalActor(patrolTarget);
+				moveRequest.SetAcceptanceRadius(15.f);
+				enemyController->MoveTo(moveRequest);
 			}
 		}
 	}

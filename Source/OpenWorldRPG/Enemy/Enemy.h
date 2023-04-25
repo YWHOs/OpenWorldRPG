@@ -32,6 +32,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	void Die();
+	bool IsTargetRange(AActor* _target, double _radius);
 	void PlayHitMontage(const FName& _sectionName);
 
 	UPROPERTY(BlueprintReadOnly)
@@ -68,6 +69,9 @@ private:
 	AActor* patrolTarget;
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
 	TArray<AActor*> patrolTargets;
+
+	UPROPERTY(EditAnywhere)
+	double patrolRadius = 200.f;
 
 public:	
 

@@ -30,9 +30,9 @@ AEnemy::AEnemy()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
 
-	pawnSensing = CreateDefaultSubobject< UPawnSensingComponent>(TEXT("PawnSensing"));
-	pawnSensing->SightRadius = 4000.f;
-	pawnSensing->SetPeripheralVisionAngle(45.f);
+	pawnSense = CreateDefaultSubobject< UPawnSensingComponent>(TEXT("PawnSensing"));
+	pawnSense->SightRadius = 4000.f;
+	pawnSense->SetPeripheralVisionAngle(45.f);
 }
 void AEnemy::PatrolTimerFinish()
 {
@@ -49,9 +49,9 @@ void AEnemy::BeginPlay()
 	enemyController = Cast<AAIController>(GetController());
 	MoveToTarget(patrolTarget);
 
-	if (pawnSensing)
+	if (pawnSense)
 	{
-		pawnSensing->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+		pawnSense->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	}
 }
 void AEnemy::Die()
@@ -113,9 +113,10 @@ AActor* AEnemy::ChoosePatrolTarget()
 			validTargets.AddUnique(target);
 		}
 	}
-	if (patrolTargets.Num() > 0)
+	const int32 patrolTargetNum = validTargets.Num();
+	if (patrolTargetNum > 0)
 	{
-		const int32 selection = FMath::RandRange(0, patrolTargets.Num() - 1);
+		const int32 selection = FMath::RandRange(0, patrolTargetNum - 1);
 		return validTargets[selection];
 	}
 	return nullptr;

@@ -53,7 +53,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* healthBarComponent;
 	UPROPERTY(VisibleAnywhere)
-	UPawnSensingComponent* pawnSensing;
+	UPawnSensingComponent* pawnSense;
 
 	//Animation
 	UPROPERTY(EditDefaultsOnly, Category = Montages)

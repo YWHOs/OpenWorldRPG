@@ -72,6 +72,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	double combatRadius = 500.f;
+	UPROPERTY(EditAnywhere)
+	double attackRadius = 150.f;
 
 	// NAV
 	UPROPERTY()

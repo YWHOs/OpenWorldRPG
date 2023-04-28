@@ -126,11 +126,15 @@ void AEnemy::PawnSeen(APawn* _seePawn)
 	if (enemyState == EEnemyState::EES_Chasing) return;
 	if (_seePawn->ActorHasTag(FName("Player")))
 	{
-		enemyState = EEnemyState::EES_Chasing;
 		GetWorldTimerManager().ClearTimer(patrolTimer);
 		GetCharacterMovement()->MaxWalkSpeed = 300.f;
 		combatTarget = _seePawn;
-		MoveToTarget(combatTarget);
+
+		if (enemyState != EEnemyState::EES_Attacking)
+		{
+			enemyState = EEnemyState::EES_Chasing;
+			MoveToTarget(combatTarget);
+		}
 	}
 }
 void AEnemy::PlayHitMontage(const FName& _sectionName)
@@ -171,11 +175,25 @@ void AEnemy::CheckCombatTarget()
 {
 	if (!IsTargetRange(combatTarget, combatRadius))
 	{
+		// Outside combat radius
 		combatTarget = nullptr;
 		if (healthBarComponent)
 		{
 			healthBarComponent->SetVisibility(false);
 		}
+		enemyState = EEnemyState::EES_Patrolling;
+		GetCharacterMovement()->MaxWalkSpeed = 125.f;
+		MoveToTarget(patrolTarget);
+	}
+	else if (!IsTargetRange(combatTarget, attackRadius) && enemyState != EEnemyState::EES_Chasing)
+	{
+		enemyState = EEnemyState::EES_Chasing;
+		GetCharacterMovement()->MaxWalkSpeed = 300.f;
+		MoveToTarget(combatTarget);
+	}
+	else if (IsTargetRange(combatTarget, attackRadius) && enemyState != EEnemyState::EES_Attacking)
+	{
+		enemyState = EEnemyState::EES_Attacking;
 	}
 }
 

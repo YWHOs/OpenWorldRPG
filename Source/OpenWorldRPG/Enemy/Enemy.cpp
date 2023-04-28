@@ -270,5 +270,8 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 		healthBarComponent->SetHealth(attributes->GetHealth());
 	}
 	combatTarget = EventInstigator->GetPawn();
+	enemyState = EEnemyState::EES_Chasing;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
+	MoveToTarget(combatTarget);
 	return DamageAmount;
 }

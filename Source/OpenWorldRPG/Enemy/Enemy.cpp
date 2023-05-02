@@ -21,7 +21,6 @@ AEnemy::AEnemy()
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
-	attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attributes"));
 	healthBarComponent = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	healthBarComponent->SetupAttachment(GetRootComponent());
 
@@ -137,15 +136,6 @@ void AEnemy::PawnSeen(APawn* _seePawn)
 		}
 	}
 }
-void AEnemy::PlayHitMontage(const FName& _sectionName)
-{
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if (animInstance && hitMontage)
-	{
-		animInstance->Montage_Play(hitMontage);
-		animInstance->Montage_JumpToSection(_sectionName, hitMontage);
-	}
-}
 
 void AEnemy::Tick(float DeltaTime)
 {
@@ -227,39 +217,6 @@ void AEnemy::GetHit_Implementation(const FVector& _point)
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), hitParticles, _point);
 	}
-}
-
-void AEnemy::DirectionalHitReact(const FVector& _point)
-{
-	const FVector forward = GetActorForwardVector();
-	const FVector impactLower(_point.X, _point.Y, GetActorLocation().Z);
-	const FVector hit = (impactLower - GetActorLocation()).GetSafeNormal();
-
-	// Forward * Hit = |Forward||Hit| * cos(theta)
-	const double cosTheta = FVector::DotProduct(forward, hit);
-	// Take inverse cosine of cos to get theta
-	double theta = FMath::Acos(cosTheta);
-	theta = FMath::RadiansToDegrees(theta);
-
-	const FVector crossProduct = FVector::CrossProduct(forward, hit);
-	if (crossProduct.Z < 0)
-	{
-		theta *= -1.f;
-	}
-	FName section("FromBack");
-	if (theta >= -45.f && theta < 45.f)
-	{
-		section = FName("FromFront");
-	}
-	else if (theta >= -135.f && theta < -45.f)
-	{
-		section = FName("FromLeft");
-	}
-	else if (theta >= 45.f && theta < 135.f)
-	{
-		section = FName("FromRight");
-	}
-	PlayHitMontage(FName(section));
 }
 
 float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

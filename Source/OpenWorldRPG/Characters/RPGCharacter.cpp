@@ -69,14 +69,7 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
 }
-void ARPGCharacter::SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled)
-{
-	if (equipWeapon && equipWeapon->GetWeaponBox())
-	{
-		equipWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
-		equipWeapon->ignoreActors.Empty();
-	}
-}
+
 void ARPGCharacter::MoveForward(float _value)
 {
 	if (Controller && _value != 0.f)

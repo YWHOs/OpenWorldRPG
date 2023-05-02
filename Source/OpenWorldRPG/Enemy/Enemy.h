@@ -3,17 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "../HitInterface.h"
+#include "../Characters/BaseCharacter.h"
 #include "../Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
-class UAnimMontage;
-class UAttributeComponent;
 class UHealthBarComponent;
 class UPawnSensingComponent;
 UCLASS()
-class OPENWORLDRPG_API AEnemy : public ACharacter, public IHitInterface
+class OPENWORLDRPG_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -29,43 +26,26 @@ public:
 
 	virtual void GetHit_Implementation(const FVector& _point) override;
 
-	void DirectionalHitReact(const FVector& _point);
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	void Die();
+	virtual void Die() override;
 	bool IsTargetRange(AActor* _target, double _radius);
 	void MoveToTarget(AActor* _target);
 	AActor* ChoosePatrolTarget();
 	UFUNCTION()
 	void PawnSeen(APawn* _seePawn);
-	void PlayHitMontage(const FName& _sectionName);
 
 	UPROPERTY(BlueprintReadOnly)
 	EDeathPose deathPose = EDeathPose::EDP_Alive;
 
 private:
 
-	//Components
-	UPROPERTY(VisibleAnywhere)
-	UAttributeComponent* attributes;
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* healthBarComponent;
 	UPROPERTY(VisibleAnywhere)
 	UPawnSensingComponent* pawnSense;
-
-	//Animation
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* dieMontage;
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* hitMontage;
-
-	UPROPERTY(EditAnywhere, Category = Sounds)
-	USoundBase* hitSound;
-
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-	UParticleSystem* hitParticles;
 
 	UPROPERTY()
 	AActor* combatTarget;

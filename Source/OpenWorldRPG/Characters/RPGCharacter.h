@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "BaseCharacter.h"
 #include "CharacterTypes.h"
 #include "RPGCharacter.generated.h"
 
@@ -12,10 +12,9 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 class UAnimMontage;
-class AWeapon;
 
 UCLASS()
-class OPENWORLDRPG_API ARPGCharacter : public ACharacter
+class OPENWORLDRPG_API ARPGCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -27,32 +26,26 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SetWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
-
-
 protected:
-	// Called when the game starts or when spawned
+	// Callback input
 	virtual void BeginPlay() override;
 	void MoveForward(float _value);
 	void MoveRight(float _value);
 	void Turn(float _value);
 	void LookUp(float _value);
 	void EKeyPressed();
-	void Attack();
+	virtual void Attack() override;
 
 	// Montage
-	void PlayAttackMontage();
-	UFUNCTION(BlueprintCallable)
-	void AttackEnd();
-	bool CanAttack();
+	virtual void PlayAttackMontage() override;
+	virtual void AttackEnd() override;
+	virtual bool CanAttack() override;
 	void PlayEquipMontage(const FName& _sectionName);
 	bool CanDisarm();
 	bool CanArm();
 
 	UFUNCTION(BlueprintCallable)
 	void Disarm();
-
 	UFUNCTION(BlueprintCallable)
 	void Arm();
 
@@ -78,12 +71,6 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem* overlapItem;
-
-	UPROPERTY(VisibleAnywhere, Category = Weapon)
-	AWeapon* equipWeapon;
-
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* attackMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* equipMontage;

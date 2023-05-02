@@ -3,7 +3,6 @@
 
 #include "Enemy.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Components/AttributeComponent.h"
 #include "../HUD/HealthBarComponent.h"
@@ -19,7 +18,6 @@ AEnemy::AEnemy()
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
-	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	healthBarComponent = CreateDefaultSubobject<UHealthBarComponent>(TEXT("HealthBar"));
 	healthBarComponent->SetupAttachment(GetRootComponent());
@@ -40,16 +38,23 @@ void AEnemy::PatrolTimerFinish()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	HideHealthBar();
-
-	enemyController = Cast<AAIController>(GetController());
-	MoveToTarget(patrolTarget);
 
 	if (pawnSense)
 	{
 		pawnSense->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	}
-
+	InitializeEnemy();
+	Tags.Add(FName("Enemy"));
+}
+void AEnemy::InitializeEnemy()
+{
+	enemyController = Cast<AAIController>(GetController());
+	MoveToTarget(patrolTarget);
+	HideHealthBar();
+	SpawnDefaultWeapon();
+}
+void AEnemy::SpawnDefaultWeapon()
+{
 	UWorld* world = GetWorld();
 	if (world && weaponClass)
 	{
@@ -102,6 +107,7 @@ AActor* AEnemy::ChoosePatrolTarget()
 }
 void AEnemy::Attack()
 {
+	enemyState = EEnemyState::EES_Engaged;
 	Super::Attack();
 	PlayAttackMontage();
 }
@@ -115,9 +121,14 @@ int32 AEnemy::PlayDeathMontage()
 	}
 	return selection;
 }
+void AEnemy::AttackEnd()
+{
+	enemyState = EEnemyState::EES_NoState;
+	CheckCombatTarget();
+}
 void AEnemy::PawnSeen(APawn* _seePawn)
 {
-	const bool shouldChase = enemyState != EEnemyState::EES_Dead && enemyState != EEnemyState::EES_Chasing && enemyState < EEnemyState::EES_Attacking && _seePawn->ActorHasTag(FName("Player"));
+	const bool shouldChase = enemyState != EEnemyState::EES_Dead && enemyState != EEnemyState::EES_Chasing && enemyState < EEnemyState::EES_Attacking && _seePawn->ActorHasTag(FName("EngageTarget"));
 
 	if (shouldChase)
 	{
@@ -138,6 +149,21 @@ void AEnemy::Tick(float DeltaTime)
 	else
 	{
 		CheckPatrolTarget();
+	}
+}
+float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	HandleDamage(DamageAmount);
+	combatTarget = EventInstigator->GetPawn();
+	ChaseTarget();
+	return DamageAmount;
+}
+
+void AEnemy::Destroyed()
+{
+	if (equipWeapon)
+	{
+		equipWeapon->Destroy();
 	}
 }
 
@@ -177,7 +203,7 @@ void AEnemy::CheckCombatTarget()
 }
 bool AEnemy::CanAttack()
 {
-	bool canAttack = !IsOutsideAttackRadius() && enemyState != EEnemyState::EES_Attacking && !IsDead();
+	bool canAttack = !IsOutsideAttackRadius() && enemyState != EEnemyState::EES_Attacking && enemyState != EEnemyState::EES_Engaged && !IsDead();
 	return canAttack;
 }
 void AEnemy::HandleDamage(float _damage)
@@ -202,22 +228,6 @@ void AEnemy::GetHit_Implementation(const FVector& _point)
 	}
 	PlayHitSound(_point);
 	SpawnHitParticle(_point);
-}
-
-float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
-{
-	HandleDamage(DamageAmount);
-	combatTarget = EventInstigator->GetPawn();
-	ChaseTarget();
-	return DamageAmount;
-}
-
-void AEnemy::Destroyed()
-{
-	if (equipWeapon)
-	{
-		equipWeapon->Destroy();
-	}
 }
 
 void AEnemy::HideHealthBar()

@@ -21,14 +21,15 @@ class OPENWORLDRPG_API ARPGCharacter : public ABaseCharacter
 public:
 	// Sets default values for this character's properties
 	ARPGCharacter();
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// IHitInterface
+	virtual void GetHit_Implementation(const FVector& _point) override;
 
 protected:
 	// Callback input
 	virtual void BeginPlay() override;
+
+	// Input
 	void MoveForward(float _value);
 	void MoveRight(float _value);
 	void Turn(float _value);
@@ -36,7 +37,7 @@ protected:
 	void EKeyPressed();
 	virtual void Attack() override;
 
-	// Montage
+	void EquipWeapon(AWeapon* _weapon);
 	virtual void AttackEnd() override;
 	virtual bool CanAttack() override;
 	void PlayEquipMontage(const FName& _sectionName);

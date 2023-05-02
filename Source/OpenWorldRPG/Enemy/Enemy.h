@@ -15,41 +15,58 @@ class OPENWORLDRPG_API AEnemy : public ABaseCharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AEnemy();
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-	void CheckPatrolTarget();
-	void CheckCombatTarget();
-	virtual void GetHit_Implementation(const FVector& _point) override;
 
+	// AActor
+	virtual void Tick(float DeltaTime) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Destroyed() override;
+
+	// IHitInterface
+	virtual void GetHit_Implementation(const FVector& _point) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// ABaseCharacter
 	virtual void Die() override;
-	bool IsTargetRange(AActor* _target, double _radius);
-	void MoveToTarget(AActor* _target);
-	AActor* ChoosePatrolTarget();
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
 	virtual void HandleDamage(float _damage) override;
 	virtual int32 PlayDeathMontage() override;
-
-	UPROPERTY(EditAnywhere, Category = Combat)
-	float deathLifeSpan = 8.f;
-
-	UFUNCTION()
-	void PawnSeen(APawn* _seePawn);
+	virtual void AttackEnd() override;
 
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EDeathPose> deathPose;
 
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState enemyState = EEnemyState::EES_Patrolling;
-
 private:
+	void InitializeEnemy();
+	void CheckPatrolTarget();
+	void CheckCombatTarget();
+	void PatrolTimerFinish();
+	void HideHealthBar();
+	void ShowHealthBar();
+	void LoseInterest();
+	void StartPatrolling();
+	void ChaseTarget();
+	bool IsOutsideCombatRadius();
+	bool IsOutsideAttackRadius();
+	bool IsChasing();
+	bool IsDead();
+	void ClearPatrolTimer();
+	void StartAttackTimer();
+	void ClearAttackTimer();
+	bool IsTargetRange(AActor* _target, double _radius);
+	void MoveToTarget(AActor* _target);
+	AActor* ChoosePatrolTarget();
+	void SpawnDefaultWeapon();
+
+	// Callback OnPawnSeen in UPawnSensing
+	UFUNCTION()
+	void PawnSeen(APawn* _seePawn);
 
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* healthBarComponent;
@@ -62,7 +79,7 @@ private:
 	AActor* combatTarget;
 
 	UPROPERTY(EditAnywhere)
-	double combatRadius = 500.f;
+	double combatRadius = 1000.f;
 	UPROPERTY(EditAnywhere)
 	double attackRadius = 150.f;
 
@@ -78,38 +95,22 @@ private:
 	double patrolRadius = 200.f;
 
 	FTimerHandle patrolTimer;
-	void PatrolTimerFinish();
-
+	// Patrol Wait Time
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float waitMin = 3.f;
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float waitMax = 5.f;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float patrollingSpeed = 125.f;
 
-	void HideHealthBar();
-	void ShowHealthBar();
-	void LoseInterest();
-	void StartPatrolling();
-	void ChaseTarget();
-	bool IsOutsideCombatRadius();
-	bool IsOutsideAttackRadius();
-	bool IsChasing();
-	bool IsDead();
-	void ClearPatrolTimer();
-
-	void StartAttackTimer();
-	void ClearAttackTimer();
 	FTimerHandle attackTimer;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float attackMin = 0.5f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float attackMax = 1.f;
-
-	UPROPERTY(EditAnywhere, Category = Combat)
-	float patrollingSpeed = 125.f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	float chasingSpeed = 300.f;
 
-public:	
-
-
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float deathLifeSpan = 8.f;
 };

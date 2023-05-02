@@ -5,17 +5,17 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "GroomComponent.h"
 #include "../Item.h"
 #include "../Weapon.h"
 #include "Animation/AnimMontage.h"
-#include "Components/BoxComponent.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -23,6 +23,12 @@ ARPGCharacter::ARPGCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 400.f, 0.f);
+
+	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 	spring = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	spring->SetupAttachment(GetRootComponent());
@@ -40,22 +46,13 @@ ARPGCharacter::ARPGCharacter()
 	eyebrows->AttachmentName = FString("head");
 }
 
-// Called when the game starts or when spawned
 void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Tags.Add(FName("Player"));
+	Tags.Add(FName("EngageTarget"));
 }
 
-// Called every frame
-void ARPGCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
 void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -68,6 +65,12 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
+}
+
+void ARPGCharacter::GetHit_Implementation(const FVector& _point)
+{
+	PlayHitSound(_point);
+	SpawnHitParticle(_point);
 }
 
 void ARPGCharacter::MoveForward(float _value)
@@ -110,10 +113,7 @@ void ARPGCharacter::EKeyPressed()
 	AWeapon* overlapWeapon = Cast<AWeapon>(overlapItem);
 	if (overlapWeapon)
 	{
-		overlapWeapon->Equip(GetMesh(), FName("right_hand_socket"), this, this);
-		characterState = ECharacterState::ECS_EquippedOneHand;
-		overlapItem = nullptr;
-		equipWeapon = overlapWeapon;
+		EquipWeapon(overlapWeapon);
 	}
 	else
 	{
@@ -139,6 +139,13 @@ void ARPGCharacter::Attack()
 		PlayAttackMontage();
 		actionState = EActionState::EAS_Attacking;
 	}
+}
+void ARPGCharacter::EquipWeapon(AWeapon* _weapon)
+{
+	_weapon->Equip(GetMesh(), FName("right_hand_socket"), this, this);
+	characterState = ECharacterState::ECS_EquippedOneHand;
+	overlapItem = nullptr;
+	equipWeapon = _weapon;
 }
 bool ARPGCharacter::CanAttack()
 {

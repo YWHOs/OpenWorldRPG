@@ -35,6 +35,9 @@ protected:
 	bool IsTargetRange(AActor* _target, double _radius);
 	void MoveToTarget(AActor* _target);
 	AActor* ChoosePatrolTarget();
+	virtual void Attack() override;
+	virtual void PlayAttackMontage() override;
+
 	UFUNCTION()
 	void PawnSeen(APawn* _seePawn);
 

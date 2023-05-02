@@ -133,6 +133,7 @@ void ARPGCharacter::EKeyPressed()
 }
 void ARPGCharacter::Attack()
 {
+	Super::Attack();
 	if (CanAttack())
 	{
 		PlayAttackMontage();
@@ -171,6 +172,7 @@ void ARPGCharacter::FinishEquip()
 }
 void ARPGCharacter::PlayAttackMontage()
 {
+	Super::PlayAttackMontage();
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
 	if (animInstance && attackMontage)
 	{

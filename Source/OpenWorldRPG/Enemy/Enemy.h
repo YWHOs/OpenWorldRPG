@@ -21,9 +21,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void CheckPatrolTarget();
 	void CheckCombatTarget();
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual void GetHit_Implementation(const FVector& _point) override;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
@@ -37,12 +34,17 @@ protected:
 	AActor* ChoosePatrolTarget();
 	virtual void Attack() override;
 	virtual void PlayAttackMontage() override;
+	virtual bool CanAttack() override;
+	virtual void HandleDamage(float _damage) override;
 
 	UFUNCTION()
 	void PawnSeen(APawn* _seePawn);
 
 	UPROPERTY(BlueprintReadOnly)
-	EDeathPose deathPose = EDeathPose::EDP_Alive;
+	EDeathPose deathPose;
+
+	UPROPERTY(BlueprintReadOnly)
+	EEnemyState enemyState = EEnemyState::EES_Patrolling;
 
 private:
 
@@ -80,7 +82,30 @@ private:
 	UPROPERTY(EditAnywhere, Category = "AI Navigation")
 	float waitMax = 5.f;
 
-	EEnemyState enemyState = EEnemyState::EES_Patrolling;
+	void HideHealthBar();
+	void ShowHealthBar();
+	void LoseInterest();
+	void StartPatrolling();
+	void ChaseTarget();
+	bool IsOutsideCombatRadius();
+	bool IsOutsideAttackRadius();
+	bool IsChasing();
+	bool IsDead();
+	void ClearPatrolTimer();
+
+	void StartAttackTimer();
+	void ClearAttackTimer();
+	FTimerHandle attackTimer;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float attackMin = 0.5f;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float attackMax = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float patrollingSpeed = 125.f;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float chasingSpeed = 300.f;
+
 public:	
 
 

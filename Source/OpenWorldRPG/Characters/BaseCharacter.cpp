@@ -24,11 +24,11 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 }
-void ABaseCharacter::GetHit_Implementation(const FVector& _point)
+void ABaseCharacter::GetHit_Implementation(const FVector& _point, AActor* _hitter)
 {
-	if (IsAlive())
+	if (IsAlive() && _hitter)
 	{
-		DirectionalHitReact(_point);
+		DirectionalHitReact(_hitter->GetActorLocation());
 	}
 	else
 	{

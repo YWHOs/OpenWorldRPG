@@ -23,7 +23,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void GetHit_Implementation(const FVector& _point) override;
+	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
 	virtual void Attack();
 	virtual void Die();
 	void DirectionalHitReact(const FVector& _point);

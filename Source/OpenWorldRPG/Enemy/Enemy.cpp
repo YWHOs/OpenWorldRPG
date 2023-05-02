@@ -216,9 +216,9 @@ void AEnemy::HandleDamage(float _damage)
 	}
 }
 
-void AEnemy::GetHit_Implementation(const FVector& _point)
+void AEnemy::GetHit_Implementation(const FVector& _point, AActor* _hitter)
 {
-	Super::GetHit_Implementation(_point);
+	Super::GetHit_Implementation(_point, _hitter);
 	if(!IsDead()) ShowHealthBar();
 	ClearPatrolTimer();
 }

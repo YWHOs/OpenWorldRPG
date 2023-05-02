@@ -23,7 +23,7 @@ public:
 	ARPGCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// IHitInterface
-	virtual void GetHit_Implementation(const FVector& _point) override;
+	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
 
 protected:
 	// Callback input

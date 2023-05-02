@@ -67,10 +67,10 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
 }
 
-void ARPGCharacter::GetHit_Implementation(const FVector& _point)
+void ARPGCharacter::GetHit_Implementation(const FVector& _point, AActor* _hitter)
 {
-	Super::GetHit_Implementation(_point);
-
+	Super::GetHit_Implementation(_point, _hitter);
+	SetWeaponCollision(ECollisionEnabled::NoCollision);
 	actionState = EActionState::EAS_HitReaction;
 }
 

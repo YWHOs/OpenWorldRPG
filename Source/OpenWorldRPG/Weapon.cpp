@@ -81,7 +81,7 @@ void AWeapon::ExecuteGetHit(FHitResult& _hit)
 	IHitInterface* hitInterface = Cast<IHitInterface>(_hit.GetActor());
 	if (hitInterface)
 	{
-		hitInterface->Execute_GetHit(_hit.GetActor(), _hit.ImpactPoint);
+		hitInterface->Execute_GetHit(_hit.GetActor(), _hit.ImpactPoint, GetOwner());
 	}
 }
 void AWeapon::BoxTrace(FHitResult& _hit)

@@ -14,6 +14,8 @@ AItem::AItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	itemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
+	itemMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	itemMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	RootComponent = itemMesh;
 
 	sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));

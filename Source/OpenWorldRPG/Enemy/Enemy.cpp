@@ -9,6 +9,7 @@
 #include "../Components/AttributeComponent.h"
 #include "../HUD/HealthBarComponent.h"
 #include "AIController.h"
+#include "../Weapon.h"
 #include "Perception/PawnSensingComponent.h"
 
 AEnemy::AEnemy()
@@ -51,6 +52,14 @@ void AEnemy::BeginPlay()
 	if (pawnSense)
 	{
 		pawnSense->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+	}
+
+	UWorld* world = GetWorld();
+	if (world && weaponClass)
+	{
+		AWeapon* defaultWeapon = world->SpawnActor<AWeapon>(weaponClass);
+		defaultWeapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
+		equipWeapon = defaultWeapon;
 	}
 }
 void AEnemy::Die()
@@ -231,4 +240,12 @@ float AEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEv
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	MoveToTarget(combatTarget);
 	return DamageAmount;
+}
+
+void AEnemy::Destroyed()
+{
+	if (equipWeapon)
+	{
+		equipWeapon->Destroy();
+	}
 }

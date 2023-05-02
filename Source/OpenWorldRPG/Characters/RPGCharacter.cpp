@@ -170,29 +170,7 @@ void ARPGCharacter::FinishEquip()
 {
 	actionState = EActionState::EAS_Unoccupied;
 }
-void ARPGCharacter::PlayAttackMontage()
-{
-	Super::PlayAttackMontage();
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if (animInstance && attackMontage)
-	{
-		animInstance->Montage_Play(attackMontage);
-		const int32 selection = FMath::RandRange(0, 1);
-		FName sectionName = FName();
-		switch (selection)
-		{
-		case 0:
-			sectionName = FName("Attack1");
-			break;
-		case 1:
-			sectionName = FName("Attack2");
-			break;
-		default:
-			break;
-		}
-		animInstance->Montage_JumpToSection(sectionName, attackMontage);
-	}
-}
+
 void ARPGCharacter::PlayEquipMontage(const FName& _sectionName)
 {
 	UAnimInstance* animInstace = GetMesh()->GetAnimInstance();

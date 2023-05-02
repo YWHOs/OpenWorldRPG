@@ -4,6 +4,7 @@
 #include "BaseCharacter.h"
 #include "../Weapon.h"
 #include "Components/BoxComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "../Components/AttributeComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -90,8 +91,34 @@ void ABaseCharacter::HandleDamage(float _damage)
 		attributes->ReceiveDamage(_damage);
 	}
 }
-void ABaseCharacter::PlayAttackMontage()
+void ABaseCharacter::PlayMontageSection(UAnimMontage* _montage, const FName& _sectionName)
 {
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance && _montage)
+	{
+		animInstance->Montage_Play(_montage);
+		animInstance->Montage_JumpToSection(_sectionName, _montage);
+	}
+}
+int32 ABaseCharacter::PlayRandomMontageSection(UAnimMontage* _montage, const TArray<FName>& _sectionNames)
+{
+	if (_sectionNames.Num() <= 0) return -1;
+	const int32 max = _sectionNames.Num() - 1;
+	const int32 selection = FMath::RandRange(0, max);
+	PlayMontageSection(_montage, _sectionNames[selection]);
+	return selection;
+}
+int32 ABaseCharacter::PlayAttackMontage()
+{
+	return PlayRandomMontageSection(attackMontage, attackMontageSections);
+}
+int32 ABaseCharacter::PlayDeathMontage()
+{
+	return PlayRandomMontageSection(deathMontage, deathMontageSections);
+}
+void ABaseCharacter::DisableCapsule()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 bool ABaseCharacter::CanAttack()
 {

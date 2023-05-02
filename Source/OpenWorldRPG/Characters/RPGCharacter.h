@@ -37,7 +37,6 @@ protected:
 	virtual void Attack() override;
 
 	// Montage
-	virtual void PlayAttackMontage() override;
 	virtual void AttackEnd() override;
 	virtual bool CanAttack() override;
 	void PlayEquipMontage(const FName& _sectionName);

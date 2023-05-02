@@ -30,12 +30,16 @@ protected:
 	virtual void Attack();
 	virtual void Die();
 
-	virtual void PlayAttackMontage();
 	void PlayHitMontage(const FName& _sectionName);
 	void DirectionalHitReact(const FVector& _point);
 	void PlayHitSound(const FVector& _point);
 	void SpawnHitParticle(const FVector& _point);
 	virtual void HandleDamage(float _damage);
+	void PlayMontageSection(UAnimMontage* _montage, const FName& _sectionName);
+	int32 PlayRandomMontageSection(UAnimMontage* _montage, const TArray<FName>& _sectionNames);
+	virtual int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
+	void DisableCapsule();
 
 	virtual bool CanAttack();
 	bool IsAlive();
@@ -50,7 +54,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* hitMontage;
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	UAnimMontage* dieMontage;
+	UAnimMontage* deathMontage;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> attackMontageSections;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	TArray<FName> deathMontageSections;
 
 	// Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

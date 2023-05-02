@@ -60,35 +60,13 @@ void AEnemy::BeginPlay()
 }
 void AEnemy::Die()
 {
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if (animInstance && dieMontage)
-	{
-		animInstance->Montage_Play(dieMontage);
-
-		const int32 selection = FMath::RandRange(0, 2);
-		FName sectionName = FName();
-		switch (selection)
-		{
-		case 0:
-			sectionName = FName("Death1");
-			deathPose = EDeathPose::EDP_Death1;
-			break;
-		case 1:
-			sectionName = FName("Death2");
-			deathPose = EDeathPose::EDP_Death2;
-			break;
-		case 2:
-			sectionName = FName("Death3");
-			deathPose = EDeathPose::EDP_Death3;
-			break;
-		default:
-			break;
-		}
-		animInstance->Montage_JumpToSection(sectionName, dieMontage);
-	}
+	enemyState = EEnemyState::EES_Dead;
+	PlayDeathMontage();
+	ClearAttackTimer();
 	HideHealthBar();
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SetLifeSpan(3.f);
+	DisableCapsule();
+	SetLifeSpan(deathLifeSpan);
+	GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 bool AEnemy::IsTargetRange(AActor* _target, double _radius)
 {
@@ -127,29 +105,15 @@ void AEnemy::Attack()
 	Super::Attack();
 	PlayAttackMontage();
 }
-void AEnemy::PlayAttackMontage()
+int32 AEnemy::PlayDeathMontage()
 {
-	Super::PlayAttackMontage();
-
-	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
-	if (animInstance && attackMontage)
+	const int32 selection = Super::PlayDeathMontage();
+	TEnumAsByte<EDeathPose> pose(selection);
+	if (pose < EDeathPose::EDP_MAX)
 	{
-		animInstance->Montage_Play(attackMontage);
-		const int32 selection = FMath::RandRange(0, 1);
-		FName sectionName = FName();
-		switch (selection)
-		{
-		case 0:
-			sectionName = FName("Attack1");
-			break;
-		case 1:
-			sectionName = FName("Attack2");
-			break;
-		default:
-			break;
-		}
-		animInstance->Montage_JumpToSection(sectionName, attackMontage);
+		deathPose = pose;
 	}
+	return selection;
 }
 void AEnemy::PawnSeen(APawn* _seePawn)
 {

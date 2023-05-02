@@ -24,6 +24,19 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 }
+void ABaseCharacter::GetHit_Implementation(const FVector& _point)
+{
+	if (IsAlive())
+	{
+		DirectionalHitReact(_point);
+	}
+	else
+	{
+		Die();
+	}
+	PlayHitSound(_point);
+	SpawnHitParticle(_point);
+}
 void ABaseCharacter::Attack()
 {
 }

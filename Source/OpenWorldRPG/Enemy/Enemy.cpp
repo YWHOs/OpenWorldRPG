@@ -72,6 +72,7 @@ void AEnemy::Die()
 	DisableCapsule();
 	SetLifeSpan(deathLifeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+	SetWeaponCollision(ECollisionEnabled::NoCollision);
 }
 bool AEnemy::IsTargetRange(AActor* _target, double _radius)
 {
@@ -217,17 +218,9 @@ void AEnemy::HandleDamage(float _damage)
 
 void AEnemy::GetHit_Implementation(const FVector& _point)
 {
-	ShowHealthBar();
-	if (IsAlive())
-	{
-		DirectionalHitReact(_point);
-	}
-	else
-	{
-		Die();
-	}
-	PlayHitSound(_point);
-	SpawnHitParticle(_point);
+	Super::GetHit_Implementation(_point);
+	if(!IsDead()) ShowHealthBar();
+	ClearPatrolTimer();
 }
 
 void AEnemy::HideHealthBar()

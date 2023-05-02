@@ -69,8 +69,9 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ARPGCharacter::GetHit_Implementation(const FVector& _point)
 {
-	PlayHitSound(_point);
-	SpawnHitParticle(_point);
+	Super::GetHit_Implementation(_point);
+
+	actionState = EActionState::EAS_HitReaction;
 }
 
 void ARPGCharacter::MoveForward(float _value)
@@ -188,6 +189,11 @@ void ARPGCharacter::PlayEquipMontage(const FName& _sectionName)
 	}
 }
 void ARPGCharacter::AttackEnd()
+{
+	actionState = EActionState::EAS_Unoccupied;
+}
+
+void ARPGCharacter::HitReactEnd()
 {
 	actionState = EActionState::EAS_Unoccupied;
 }

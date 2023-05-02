@@ -52,6 +52,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void FinishEquip();
 
+	UFUNCTION(BlueprintCallable)
+	void HitReactEnd();
+
 private:
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
 

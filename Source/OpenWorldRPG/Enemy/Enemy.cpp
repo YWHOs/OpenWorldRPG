@@ -109,8 +109,10 @@ AActor* AEnemy::ChoosePatrolTarget()
 }
 void AEnemy::Attack()
 {
-	enemyState = EEnemyState::EES_Engaged;
 	Super::Attack();
+	if (combatTarget == nullptr) return;
+	enemyState = EEnemyState::EES_Engaged;
+
 	PlayAttackMontage();
 }
 void AEnemy::AttackEnd()

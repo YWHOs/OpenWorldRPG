@@ -39,9 +39,14 @@ void ABaseCharacter::GetHit_Implementation(const FVector& _point, AActor* _hitte
 }
 void ABaseCharacter::Attack()
 {
+	if (combatTarget && combatTarget->ActorHasTag(FName("Dead")))
+	{
+		combatTarget = nullptr;
+	}
 }
 void ABaseCharacter::Die()
 {
+	Tags.Add(FName("Dead"));
 	PlayDeathMontage();
 }
 void ABaseCharacter::PlayHitMontage(const FName& _sectionName)

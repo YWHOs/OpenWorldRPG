@@ -92,6 +92,7 @@ void ARPGCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ARPGCharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Equip"), IE_Pressed, this, &ARPGCharacter::EKeyPressed);
 	PlayerInputComponent->BindAction(TEXT("Attack"), IE_Pressed, this, &ARPGCharacter::Attack);
+	PlayerInputComponent->BindAction(TEXT("Dodge"), IE_Pressed, this, &ARPGCharacter::Dodge);
 }
 void ARPGCharacter::Jump()
 {
@@ -211,6 +212,12 @@ void ARPGCharacter::Attack()
 		actionState = EActionState::EAS_Attacking;
 	}
 }
+void ARPGCharacter::Dodge()
+{
+	if (actionState != EActionState::EAS_Unoccupied) return;
+	PlayDodgeMontage();
+	actionState = EActionState::EAS_Dodge;
+}
 void ARPGCharacter::EquipWeapon(AWeapon* _weapon)
 {
 	_weapon->Equip(GetMesh(), FName("right_hand_socket"), this, this);
@@ -267,6 +274,11 @@ void ARPGCharacter::PlayEquipMontage(const FName& _sectionName)
 }
 void ARPGCharacter::AttackEnd()
 {
+	actionState = EActionState::EAS_Unoccupied;
+}
+void ARPGCharacter::DodgeEnd()
+{
+	Super::DodgeEnd();
 	actionState = EActionState::EAS_Unoccupied;
 }
 

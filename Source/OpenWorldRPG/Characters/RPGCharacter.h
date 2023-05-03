@@ -45,9 +45,11 @@ protected:
 	void LookUp(float _value);
 	void EKeyPressed();
 	virtual void Attack() override;
+	void Dodge();
 
 	void EquipWeapon(AWeapon* _weapon);
 	virtual void AttackEnd() override;
+	virtual void DodgeEnd() override;
 	virtual bool CanAttack() override;
 	void PlayEquipMontage(const FName& _sectionName);
 	bool CanDisarm();

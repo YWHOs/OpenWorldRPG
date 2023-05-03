@@ -142,6 +142,10 @@ int32 ABaseCharacter::PlayDeathMontage()
 	}
 	return selection;
 }
+void ABaseCharacter::PlayDodgeMontage()
+{
+	PlayMontageSection(dodgeMontage, FName("Default"));
+}
 void ABaseCharacter::StopAttackMontage()
 {
 	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
@@ -188,6 +192,10 @@ void ABaseCharacter::DisableMeshCollision()
 }
 void ABaseCharacter::AttackEnd()
 {
+}
+void ABaseCharacter::DodgeEnd()
+{
+
 }
 // Called every frame
 void ABaseCharacter::Tick(float DeltaTime)

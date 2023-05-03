@@ -22,4 +22,5 @@ private:
 	int32 soul;
 public:
 	FORCEINLINE int32 GetSoul() const { return soul; }
+	FORCEINLINE void SetSoul(int32 _soul) { soul = _soul; }
 };

@@ -20,7 +20,7 @@
 ARPGCharacter::ARPGCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -50,7 +50,14 @@ ARPGCharacter::ARPGCharacter()
 	eyebrows->SetupAttachment(GetMesh());
 	eyebrows->AttachmentName = FString("head");
 }
-
+void ARPGCharacter::Tick(float DeltaTime)
+{
+	if (attributes && overlay)
+	{
+		attributes->RegenStamina(DeltaTime);
+		overlay->SetStaminaBar(attributes->GetStaminaPercent());
+	}
+}
 void ARPGCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -214,9 +221,19 @@ void ARPGCharacter::Attack()
 }
 void ARPGCharacter::Dodge()
 {
-	if (actionState != EActionState::EAS_Unoccupied) return;
+	if (actionState != EActionState::EAS_Unoccupied || !HasEnoughStamina()) return;
+
 	PlayDodgeMontage();
 	actionState = EActionState::EAS_Dodge;
+	if (attributes && overlay)
+	{
+		attributes->UseStamina(attributes->GetDodgeCost());
+		overlay->SetStaminaBar(attributes->GetStaminaPercent());
+	}
+}
+bool ARPGCharacter::HasEnoughStamina()
+{
+	return attributes && attributes->GetStamina() > attributes->GetDodgeCost();
 }
 void ARPGCharacter::EquipWeapon(AWeapon* _weapon)
 {

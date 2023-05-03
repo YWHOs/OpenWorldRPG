@@ -6,11 +6,7 @@
 // Sets default values for this component's properties
 UAttributeComponent::UAttributeComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -25,9 +21,17 @@ void UAttributeComponent::ReceiveDamage(float _damage)
 {
 	health = FMath::Clamp(health - _damage, 0.f, maxHealth);
 }
+void UAttributeComponent::UseStamina(float _stamina)
+{
+	stamina = FMath::Clamp(stamina - _stamina, 0.f, maxStamina);
+}
 float UAttributeComponent::GetHealth()
 {
 	return health / maxHealth;
+}
+float UAttributeComponent::GetStaminaPercent()
+{
+	return stamina / maxStamina;
 }
 bool UAttributeComponent::IsAlive()
 {
@@ -46,6 +50,9 @@ void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 }
 
+void UAttributeComponent::RegenStamina(float _deltaTime)
+{
+	stamina = FMath::Clamp(stamina + staminaRegen * _deltaTime, 0.f, maxStamina);
+}

@@ -5,17 +5,19 @@
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
 #include "CharacterTypes.h"
+#include "../PickupInterface.h"
 #include "RPGCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
+class ASoul;
 class UAnimMontage;
 class UUOverlay;
 
 UCLASS()
-class OPENWORLDRPG_API ARPGCharacter : public ABaseCharacter
+class OPENWORLDRPG_API ARPGCharacter : public ABaseCharacter, public IPickupInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +29,8 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	// IHitInterface
 	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
+	virtual void SetOverlapItem(AItem* _item) override;
+	virtual void AddSouls(ASoul* _soul) override;
 
 protected:
 	// Callback input
@@ -88,7 +92,6 @@ private:
 	UPROPERTY()
 	UUOverlay* overlay;
 public:
-	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return characterState; }
 	FORCEINLINE EActionState GetActionState() const { return actionState; }
 };

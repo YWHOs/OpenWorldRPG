@@ -4,7 +4,7 @@
 #include "Item.h"
 #include "DrawDebugHelpers.h"
 #include "Components/SphereComponent.h"
-#include "Characters/RPGCharacter.h"
+#include "PickupInterface.h"
 #include "NiagaraComponent.h"
 
 // Sets default values
@@ -42,19 +42,19 @@ float AItem::TransformedSin()
 
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ARPGCharacter* character = Cast<ARPGCharacter>(OtherActor);
-	if (character)
+	IPickupInterface* hitInterface = Cast<IPickupInterface>(OtherActor);
+	if (hitInterface)
 	{
-		character->SetOverlapItem(this);
+		hitInterface->SetOverlapItem(this);
 	}
 }
 
 void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	ARPGCharacter* character = Cast<ARPGCharacter>(OtherActor);
-	if (character)
+	IPickupInterface* hitInterface = Cast<IPickupInterface>(OtherActor);
+	if (hitInterface)
 	{
-		character->SetOverlapItem(nullptr);
+		hitInterface->SetOverlapItem(nullptr);
 	}
 }
 

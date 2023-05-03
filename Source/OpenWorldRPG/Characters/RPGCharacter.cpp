@@ -122,7 +122,14 @@ void ARPGCharacter::GetHit_Implementation(const FVector& _point, AActor* _hitter
 	}
 
 }
+void ARPGCharacter::SetOverlapItem(AItem* _item)
+{
+	overlapItem = _item;
+}
+void ARPGCharacter::AddSouls(ASoul* _soul)
+{
 
+}
 void ARPGCharacter::MoveForward(float _value)
 {
 	if (Controller && _value != 0.f)

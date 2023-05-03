@@ -37,6 +37,13 @@ protected:
 	void PlayHitMontage(const FName& _sectionName);
 	virtual int32 PlayAttackMontage();
 	virtual int32 PlayDeathMontage();
+	void StopAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetTranslationWarpTarget();
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetRotationWarpTarget();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
@@ -50,6 +57,12 @@ protected:
 	// Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	UAttributeComponent* attributes;
+
+	UPROPERTY(BlueprintReadOnly, Category = Combat)
+	AActor* combatTarget;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	double warpTargetDistance = 75.f;
 
 private:
 	void PlayMontageSection(UAnimMontage* _montage, const FName& _sectionName);

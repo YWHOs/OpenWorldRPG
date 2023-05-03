@@ -130,6 +130,34 @@ int32 ABaseCharacter::PlayDeathMontage()
 {
 	return PlayRandomMontageSection(deathMontage, deathMontageSections);
 }
+void ABaseCharacter::StopAttackMontage()
+{
+	UAnimInstance* animInstance = GetMesh()->GetAnimInstance();
+	if (animInstance)
+	{
+		animInstance->Montage_Stop(0.25f, attackMontage);
+	}
+}
+FVector ABaseCharacter::GetTranslationWarpTarget()
+{
+	if (combatTarget == nullptr) return FVector();
+
+	const FVector targetLocation = combatTarget->GetActorLocation();
+	const FVector location = GetActorLocation();
+
+	FVector targetToMe = (location - targetLocation).GetSafeNormal();
+	targetToMe *= warpTargetDistance;
+
+	return targetLocation + targetToMe;
+}
+FVector ABaseCharacter::GetRotationWarpTarget()
+{
+	if (combatTarget)
+	{
+		return combatTarget->GetActorLocation();
+	}
+	return FVector();
+}
 void ABaseCharacter::DisableCapsule()
 {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);

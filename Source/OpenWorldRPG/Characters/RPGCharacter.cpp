@@ -154,6 +154,7 @@ void ARPGCharacter::AddGold(ATreasure* _gold)
 }
 void ARPGCharacter::MoveForward(float _value)
 {
+	if (actionState != EActionState::EAS_Unoccupied) return;
 	if (Controller && _value != 0.f)
 	{
 		const FRotator controlRotation = GetControlRotation();

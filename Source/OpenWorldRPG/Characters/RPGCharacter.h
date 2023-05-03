@@ -22,6 +22,7 @@ public:
 	// Sets default values for this character's properties
 	ARPGCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	// IHitInterface
 	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
 

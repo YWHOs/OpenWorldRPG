@@ -13,6 +13,7 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 class ASoul;
+class ATreasure;
 class UAnimMontage;
 class UUOverlay;
 
@@ -30,7 +31,8 @@ public:
 	// IHitInterface
 	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
 	virtual void SetOverlapItem(AItem* _item) override;
-	virtual void AddSouls(ASoul* _soul) override;
+	virtual void AddSoul(ASoul* _soul) override;
+	virtual void AddGold(ATreasure* _gold) override;
 
 protected:
 	// Callback input

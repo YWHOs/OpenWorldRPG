@@ -13,6 +13,8 @@
 #include "../HUD/RPGHUD.h"
 #include "../HUD/UOverlay.h"
 #include "../Components/AttributeComponent.h"
+#include "../Soul.h"
+#include "../Treasure.h"
 
 // Sets default values
 ARPGCharacter::ARPGCharacter()
@@ -126,9 +128,21 @@ void ARPGCharacter::SetOverlapItem(AItem* _item)
 {
 	overlapItem = _item;
 }
-void ARPGCharacter::AddSouls(ASoul* _soul)
+void ARPGCharacter::AddSoul(ASoul* _soul)
 {
-
+	if (attributes && overlay)
+	{
+		attributes->AddSoul(_soul->GetSoul());
+		overlay->SetSoul(attributes->GetSoul());
+	}
+}
+void ARPGCharacter::AddGold(ATreasure* _gold)
+{
+	if (attributes && overlay)
+	{
+		attributes->AddGold(_gold->GetGold());
+		overlay->SetGold(attributes->GetGold());
+	}
 }
 void ARPGCharacter::MoveForward(float _value)
 {

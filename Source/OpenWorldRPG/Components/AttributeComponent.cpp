@@ -18,8 +18,6 @@ UAttributeComponent::UAttributeComponent()
 void UAttributeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
 	
 }
 
@@ -34,6 +32,14 @@ float UAttributeComponent::GetHealth()
 bool UAttributeComponent::IsAlive()
 {
 	return health > 0.f;
+}
+void UAttributeComponent::AddGold(int32 _gold)
+{
+	gold += _gold;
+}
+void UAttributeComponent::AddSoul(int32 _soul)
+{
+	soul += _soul;
 }
 // Called every frame
 void UAttributeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

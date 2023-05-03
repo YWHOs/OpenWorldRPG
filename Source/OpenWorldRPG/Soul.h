@@ -16,4 +16,10 @@ class OPENWORLDRPG_API ASoul : public AItem
 	
 protected:
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+private:
+	UPROPERTY(EditAnywhere)
+	int32 soul;
+public:
+	FORCEINLINE int32 GetSoul() const { return soul; }
 };

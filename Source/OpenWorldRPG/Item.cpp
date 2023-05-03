@@ -6,6 +6,8 @@
 #include "Components/SphereComponent.h"
 #include "PickupInterface.h"
 #include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AItem::AItem()
@@ -57,7 +59,20 @@ void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 		hitInterface->SetOverlapItem(nullptr);
 	}
 }
-
+void AItem::SpawnPickupSystem()
+{
+	if (pickupEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, pickupEffect, GetActorLocation());
+	}
+}
+void AItem::SpawnPickupSound()
+{
+	if (pickupSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(this, pickupSound, GetActorLocation());
+	}
+}
 // Called every frame
 void AItem::Tick(float DeltaTime)
 {

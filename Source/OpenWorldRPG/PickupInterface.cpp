@@ -5,12 +5,17 @@
 
 // Add default functionality here for any IPickupInterface functions that are not pure virtual.
 
-void IPickupInterface::SetOverlapItem(class AItem* _item)
+void IPickupInterface::SetOverlapItem(AItem* _item)
 {
 
 }
 
-void IPickupInterface::AddSouls(class ASoul* _soul)
+void IPickupInterface::AddSoul(ASoul* _soul)
+{
+
+}
+
+void IPickupInterface::AddGold(ATreasure* _gold)
 {
 
 }

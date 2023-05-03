@@ -23,5 +23,6 @@ class OPENWORLDRPG_API IPickupInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void SetOverlapItem(class AItem* _item);
-	virtual void AddSouls(class ASoul* _soul);
+	virtual void AddSoul(class ASoul* _soul);
+	virtual void AddGold(class ATreasure* _gold);
 };

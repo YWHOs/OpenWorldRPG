@@ -23,4 +23,7 @@ private:
 
 	UPROPERTY()
 	UUOverlay* overlay;
+
+public:
+	FORCEINLINE UUOverlay* GetOverlay() const { return overlay; }
 };

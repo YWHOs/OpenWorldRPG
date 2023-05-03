@@ -12,6 +12,7 @@ class UCameraComponent;
 class UGroomComponent;
 class AItem;
 class UAnimMontage;
+class UUOverlay;
 
 UCLASS()
 class OPENWORLDRPG_API ARPGCharacter : public ABaseCharacter
@@ -22,6 +23,7 @@ public:
 	// Sets default values for this character's properties
 	ARPGCharacter();
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void Jump() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 	// IHitInterface
 	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
@@ -44,6 +46,7 @@ protected:
 	void PlayEquipMontage(const FName& _sectionName);
 	bool CanDisarm();
 	bool CanArm();
+	virtual void Die() override;
 
 	UFUNCTION(BlueprintCallable)
 	void Disarm();
@@ -57,6 +60,9 @@ protected:
 	void HitReactEnd();
 
 private:
+	void InitializeOverlay();
+	void SetHUDHealth();
+
 	ECharacterState characterState = ECharacterState::ECS_Unequipped;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
@@ -78,7 +84,11 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	UAnimMontage* equipMontage;
+
+	UPROPERTY()
+	UUOverlay* overlay;
 public:
 	FORCEINLINE void SetOverlapItem(AItem* _item) { overlapItem = _item; }
 	FORCEINLINE ECharacterState GetCharacterState() const { return characterState; }
+	FORCEINLINE EActionState GetActionState() const { return actionState; }
 };

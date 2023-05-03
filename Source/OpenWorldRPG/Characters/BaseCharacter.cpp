@@ -42,6 +42,7 @@ void ABaseCharacter::Attack()
 }
 void ABaseCharacter::Die()
 {
+	PlayDeathMontage();
 }
 void ABaseCharacter::PlayHitMontage(const FName& _sectionName)
 {
@@ -128,7 +129,13 @@ int32 ABaseCharacter::PlayAttackMontage()
 }
 int32 ABaseCharacter::PlayDeathMontage()
 {
-	return PlayRandomMontageSection(deathMontage, deathMontageSections);
+	const int32 selection = PlayRandomMontageSection(deathMontage, deathMontageSections);
+	TEnumAsByte<EDeathPose> pose(selection);
+	if (pose < EDeathPose::EDP_MAX)
+	{
+		deathPose = pose;
+	}
+	return selection;
 }
 void ABaseCharacter::StopAttackMontage()
 {
@@ -169,6 +176,10 @@ bool ABaseCharacter::CanAttack()
 bool ABaseCharacter::IsAlive()
 {
 	return attributes && attributes->IsAlive();
+}
+void ABaseCharacter::DisableMeshCollision()
+{
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void ABaseCharacter::AttackEnd()
 {

@@ -25,13 +25,13 @@ void UUOverlay::SetGold(int32 _gold)
 {
 	if (GoldText)
 	{
-		GoldText->SetText(FText::FromString(FString::Printf(TEXT("d"), _gold)));
+		GoldText->SetText(FText::FromString(FString::Printf(TEXT("%d"), _gold)));
 	}
 }
 void UUOverlay::SetSoul(int32 _soul)
 {
 	if (SoulText)
 	{
-		SoulText->SetText(FText::FromString(FString::Printf(TEXT("d"), _soul)));
+		SoulText->SetText(FText::FromString(FString::Printf(TEXT("%d"), _soul)));
 	}
 }

@@ -28,5 +28,7 @@ void URPGAnimInstance::NativeUpdateAnimation(float _time)
 
 		isFalling = characterMovement->IsFalling();
 		characterState = character->GetCharacterState();
+		actionState = character->GetActionState();
+		deathPose = character->GetDeathPose();
 	}
 }

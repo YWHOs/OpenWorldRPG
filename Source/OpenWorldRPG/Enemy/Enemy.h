@@ -34,11 +34,7 @@ protected:
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
 	virtual void HandleDamage(float _damage) override;
-	virtual int32 PlayDeathMontage() override;
 	virtual void AttackEnd() override;
-
-	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EDeathPose> deathPose;
 
 	UPROPERTY(BlueprintReadOnly)
 	EEnemyState enemyState = EEnemyState::EES_Patrolling;

@@ -60,7 +60,7 @@ void AEnemy::SpawnDefaultWeapon()
 	if (world && weaponClass)
 	{
 		AWeapon* defaultWeapon = world->SpawnActor<AWeapon>(weaponClass);
-		defaultWeapon->Equip(GetMesh(), FName("RightHandSocket"), this, this);
+		defaultWeapon->Equip(GetMesh(), FName("WeaponSocket"), this, this);
 		equipWeapon = defaultWeapon;
 	}
 }
@@ -100,7 +100,7 @@ void AEnemy::MoveToTarget(AActor* _target)
 	if (enemyController == nullptr || _target == nullptr) return;
 	FAIMoveRequest moveRequest;
 	moveRequest.SetGoalActor(_target);
-	moveRequest.SetAcceptanceRadius(50.f);
+	moveRequest.SetAcceptanceRadius(acceptanceRadius);
 	enemyController->MoveTo(moveRequest);
 }
 AActor* AEnemy::ChoosePatrolTarget()

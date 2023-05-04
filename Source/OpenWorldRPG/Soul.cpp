@@ -29,7 +29,7 @@ void ASoul::BeginPlay()
 	actorsToIgnore.Add(GetOwner());
 	FHitResult hitResult;
 
-	UKismetSystemLibrary::LineTraceSingleForObjects(this, start, end, objectTypes, false, actorsToIgnore, EDrawDebugTrace::ForDuration, hitResult, true);
+	UKismetSystemLibrary::LineTraceSingleForObjects(this, start, end, objectTypes, false, actorsToIgnore, EDrawDebugTrace::None, hitResult, true);
 	desiredZ = hitResult.ImpactPoint.Z;
 }
 void ASoul::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

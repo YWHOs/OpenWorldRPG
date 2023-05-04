@@ -64,9 +64,9 @@ void AEnemy::SpawnDefaultWeapon()
 		equipWeapon = defaultWeapon;
 	}
 }
-void AEnemy::Die()
+void AEnemy::Die_Implementation()
 {
-	Super::Die();
+	Super::Die_Implementation();
 
 	enemyState = EEnemyState::EES_Dead;
 	ClearAttackTimer();
@@ -238,6 +238,12 @@ void AEnemy::GetHit_Implementation(const FVector& _point, AActor* _hitter)
 	ClearAttackTimer();
 	SetWeaponCollision(ECollisionEnabled::NoCollision);
 	StopAttackMontage();
+
+	if (!IsOutsideAttackRadius())
+	{
+		if(!IsDead())
+			StartAttackTimer();
+	}
 }
 
 void AEnemy::HideHealthBar()

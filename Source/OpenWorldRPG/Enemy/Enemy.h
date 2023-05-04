@@ -30,14 +30,14 @@ protected:
 	virtual void BeginPlay() override;
 
 	// ABaseCharacter
-	virtual void Die() override;
+	virtual void Die_Implementation() override;
 	void SpawnSoul();
 	virtual void Attack() override;
 	virtual bool CanAttack() override;
 	virtual void HandleDamage(float _damage) override;
 	virtual void AttackEnd() override;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	EEnemyState enemyState = EEnemyState::EES_Patrolling;
 
 private:

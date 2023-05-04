@@ -55,7 +55,7 @@ protected:
 	void PlayEquipMontage(const FName& _sectionName);
 	bool CanDisarm();
 	bool CanArm();
-	virtual void Die() override;
+	virtual void Die_Implementation() override;
 	bool HasEnoughStamina();
 
 	UFUNCTION(BlueprintCallable)

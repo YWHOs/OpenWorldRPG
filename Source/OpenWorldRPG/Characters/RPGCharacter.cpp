@@ -269,9 +269,9 @@ void ARPGCharacter::Arm()
 		equipWeapon->AttachMeshToSocket(GetMesh(), FName("right_hand_socket"));
 	}
 }
-void ARPGCharacter::Die()
+void ARPGCharacter::Die_Implementation()
 {
-	Super::Die();
+	Super::Die_Implementation();
 
 	actionState = EActionState::EAS_Dead;
 	DisableMeshCollision();

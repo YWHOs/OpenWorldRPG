@@ -26,7 +26,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void GetHit_Implementation(const FVector& _point, AActor* _hitter) override;
 	virtual void Attack();
-	virtual void Die();
+	UFUNCTION(BlueprintNativeEvent)
+	void Die();
 	void DirectionalHitReact(const FVector& _point);
 	virtual void HandleDamage(float _damage);
 	void PlayHitSound(const FVector& _point);

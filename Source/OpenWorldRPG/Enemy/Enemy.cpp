@@ -82,10 +82,12 @@ void AEnemy::SpawnSoul()
 	UWorld* world = GetWorld();
 	if (world && soulClass && attributes)
 	{
-		ASoul* spawnSoul = world->SpawnActor<ASoul>(soulClass, GetActorLocation(), GetActorRotation());
+		const FVector spawnLocation = GetActorLocation() + FVector(0.f, 0.f, 125.f);
+		ASoul* spawnSoul = world->SpawnActor<ASoul>(soulClass, spawnLocation, GetActorRotation());
 		if (spawnSoul)
 		{
 			spawnSoul->SetSoul(attributes->GetSoul());
+			spawnSoul->SetOwner(this);
 		}
 	}
 }

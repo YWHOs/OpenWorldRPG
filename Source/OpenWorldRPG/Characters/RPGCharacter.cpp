@@ -193,6 +193,10 @@ void ARPGCharacter::EKeyPressed()
 	AWeapon* overlapWeapon = Cast<AWeapon>(overlapItem);
 	if (overlapWeapon)
 	{
+		if (equipWeapon)
+		{
+			equipWeapon->Destroy();
+		}
 		EquipWeapon(overlapWeapon);
 	}
 	else
